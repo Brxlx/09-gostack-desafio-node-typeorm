@@ -6,7 +6,6 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
-  ManyToMany,
 } from 'typeorm';
 
 import Customer from '@modules/customers/infra/typeorm/entities/Customer';
