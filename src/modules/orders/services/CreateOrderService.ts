@@ -20,7 +20,7 @@ interface IRequest {
 @injectable()
 class CreateOrderService {
   constructor(
-    @inject('OrderRepository')
+    @inject('OrdersRepository')
     private ordersRepository: IOrdersRepository,
     @inject('ProductsRepository')
     private productsRepository: IProductsRepository,
@@ -65,7 +65,7 @@ class CreateOrderService {
     const serializedProducts = products.map(product => ({
       product_id: product.id,
       quantity: product.quantity,
-      price: existentProducts.filter(p => p.id === product.id)[0].quantity,
+      price: existentProducts.filter(p => p.id === product.id)[0].price,
     }));
 
     const order = await this.ordersRepository.create({
@@ -73,10 +73,12 @@ class CreateOrderService {
       products: serializedProducts,
     });
 
-    const orderedProductsQuantity = products.map(prd => ({
-      id: prd.id,
+    const { order_products } = order;
+
+    const orderedProductsQuantity = order_products.map(prd => ({
+      id: prd.product_id,
       quantity:
-        existentProducts.filter(p => p.id === prd.id)[0].quantity -
+        existentProducts.filter(p => p.id === prd.product_id)[0].quantity -
         prd.quantity,
     }));
 
